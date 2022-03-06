@@ -30,6 +30,11 @@ def read_root():
     return {"New!!": "Path!"}
 
 
+@app.get("/new-feature2")
+def read_root():
+    return {"New!!": "Path!"}
+
+
 @app.get("/new-path")
 def read_root():
     return {"Another New!": "Path!"}
