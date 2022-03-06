@@ -1,0 +1,132 @@
+
+# Workflow Name
+name: CI
+# Configure Triggers
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+env:
+  SERVICE_NAME: python-demo-app
+  PYTHON_VERSION: "3.9.6"
+  POETRY_VERSION: "1.1.8"
+# Configure Jobs
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+
+    # Workaround for running composite actions from private repo
+    - name: Get composite run steps repository
+      uses: actions/checkout@v2
+      with:
+        repository: jonyjalfon94/workflow-templates
+        token: ${{ secrets.TOKEN }}
+        path: .github
+
+    # Setup Python Env
+    - name: Setup Env
+      uses: ./.github/actions/setup-env
+      with:
+        python_version: ${{ env.PYTHON_VERSION }}
+        poetry_version: ${{ env.POETRY_VERSION }}
+
+    # Run Unit test and publish results
+    - name: Test
+      uses: ./.github/actions/test
+      with:
+        tests_path: ./tests
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+
+    # Workaround for running composite actions from private repo
+    - name: Get composite run steps repository
+      uses: actions/checkout@v2
+      with:
+        repository: jonyjalfon94/workflow-templates
+        token: ${{ secrets.TOKEN }}
+        path: .github
+
+    # Setup Python Env
+    - name: Setup Env
+      uses: ./.github/actions/setup-env
+      with:
+        python_version: ${{ env.PYTHON_VERSION }}
+        poetry_version: ${{ env.POETRY_VERSION }}
+
+    # Run Lint
+    - name: Lint
+      uses: ./.github/actions/lint
+      with:
+        lint_path: app tests
+
+  label-pr:
+    runs-on: ubuntu-latest
+    if: success() && (github.event_name == 'pull_request')
+    needs: [test,lint]
+    steps:
+
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          clean: false
+
+      # Label PR
+      - uses: release-drafter/release-drafter@v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+          
+  build:
+    if: success() && (github.event_name == 'push')
+    name: Docker Build and Push
+    needs: [test,lint]
+    permissions:
+      id-token: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+
+    # Workaround for running composite actions from private repo
+    - name: Get composite run steps repository
+      uses: actions/checkout@v2
+      with:
+        repository: jonyjalfon94/workflow-templates
+        token: ${{ secrets.TOKEN }}
+        path: .github
+
+    # Get current date to pass as build-arg
+    - name: Get current date
+      shell: bash
+      id: date
+      run: echo "::set-output name=date::$(date +%Y-%m-%dT%H:%M:%S)"
+
+    # Build and Push with Docker
+    - uses: ./.github/actions/build-and-push-docker
+      name: Build and Push Docker Image
+      with:
+        push: true
+        target: production
+        github_token: ${{ secrets.token }}
+        docker_username: jonyjalfon94
+        docker_password: ${{ secrets.DOCKERHUB_PASSWORD }}
+        image_name: ${{ env.SERVICE_NAME }}
+        tag: ${{ github.sha }}
+        build_args: |
+          SERVICE_COMMIT=${{ github.sha }}
+          SERVICE_NAME=${{ env.SERVICE_NAME }}
+          SERVICE_VERSION=${{ github.sha }}
+          SERVICE_BUILD_TIME=${{ steps.date.outputs.date }}
+
+    # Workaround for post action error
+    - name: Get composite run steps repository
+      uses: actions/checkout@v2
+      with:
+        repository: jonyjalfon94/workflow-templates
+        token: ${{ secrets.TOKEN }}
+        path: .github
