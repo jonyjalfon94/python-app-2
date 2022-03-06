@@ -22,7 +22,7 @@ def read_root():
 
 @app.get("/new")
 def read_root():
-    return {"New!": "Path!"}
+    return {"New!!": "Path!"}
 
 
 @app.get("/new-feature")
