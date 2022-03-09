@@ -52,7 +52,7 @@ def read_root():
 
 @app.get("/new-path-2")
 def read_root():
-    return {"Another New!!!!!": "Path!!"}
+    return {"Another New!!!!!!!": "Path!!"}
 
 
 @app.get("/items/{item_id}")
