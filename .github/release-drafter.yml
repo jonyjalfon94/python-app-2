@@ -2,13 +2,9 @@ name-template: '$RESOLVED_VERSION 🌈'
 tag-template: '$RESOLVED_VERSION'
 autolabeler:
   - label: 'patch'
-    branch:
-      - '/fix\/.+/'
     title:
       - '/fix/i'
   - label: 'minor'
-    branch:
-      - '/feature\/.+/'
     title:
       - '/feat/i'
   - label: 'major'
@@ -34,7 +30,6 @@ version-resolver:
   patch:
     labels:
       - 'patch'
-  default: patch
 change-template: '- $TITLE @$AUTHOR (#$NUMBER)'
 change-title-escapes: '\<*_&' # You can add # and @ to disable mentions, and add ` to disable code blocks.
 template: |
