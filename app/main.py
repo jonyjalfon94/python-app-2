@@ -25,7 +25,7 @@ def read_root():
     return {"New!!": "Path!"}
 
 
-@app.get("/new-feature")
+@app.get("/break")
 def read_root():
     return {"New!!": "Path!"}
 
