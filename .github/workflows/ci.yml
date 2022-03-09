@@ -8,6 +8,7 @@ on:
     branches: [ main, develop ]
     paths-ignore:
       - 'CHANGELOG.md'
+      - '.github/**'
   pull_request:
     branches: [ main, develop ]
 env:
