@@ -35,7 +35,7 @@ def read_root():
     return {"New!!": "Path!"}
 
 
-@app.get("/new-path3")
+@app.get("/new-path3123")
 def read_root():
     return {"Another New!!!!!!": "Path!"}
 
