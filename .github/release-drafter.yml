@@ -12,9 +12,6 @@ autolabeler:
     title:
       - '/feat/i'
   - label: 'major'
-    branch:
-      - '/feature\/.+/'
-      - '/fix\/.+/'
     title:
       - '/BREAKING CHANGE/i'
 categories:
