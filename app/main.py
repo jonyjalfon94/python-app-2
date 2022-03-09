@@ -27,7 +27,7 @@ def read_root():
 
 @app.get("/new-features")
 def read_root():
-    return {"New!!": "Path!!"}
+    return {"New!!!!!": "Path!!!!"}
 
 
 @app.get("/new-feature2")
@@ -47,7 +47,7 @@ def read_root():
 
 @app.get("/new-path")
 def read_root():
-    return {"Another New!!!": "Path!!"}
+    return {"Another New!!!!!!!": "Path!!"}
 
 
 @app.get("/items/{item_id}")
