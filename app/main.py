@@ -35,9 +35,9 @@ def read_root():
     return {"New!!": "Path!"}
 
 
-@app.get("/new-path")
+@app.get("/new-path3123")
 def read_root():
-    return {"Another New!!!!!!": "Path!"}
+    return {"Another New!!!": "Path!"}
 
 
 @app.get("/another-refactor")
@@ -48,6 +48,11 @@ def read_root():
 @app.get("/new-path")
 def read_root():
     return {"Another New!!!!!": "Path!!"}
+
+
+@app.get("/new-path-2")
+def read_root():
+    return {"Another New!!!!!!!": "Path!!"}
 
 
 @app.get("/items/{item_id}")
