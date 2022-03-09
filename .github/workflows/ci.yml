@@ -85,7 +85,7 @@ jobs:
   build:
     if: success() && (github.event_name == 'push')
     name: Docker Build and Push
-    needs: [test,lint,label-pr]
+    needs: [test,lint]
     permissions:
       id-token: write
       contents: read
