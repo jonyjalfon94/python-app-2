@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message'
+        required: true
+        default: 'Hello!'
+        
+jobs:
+  say-hello:
+    runs-on: "ubuntu-latest"
+    steps:
+      - run: echo ${{ github.event.inputs.message }}
